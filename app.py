@@ -1,6 +1,9 @@
 """LoomTrace website - verify the GI tag of a handloom product."""
+import hmac
 import json
+import os
 import time
+from html import escape as E
 
 import pandas as pd
 import streamlit as st
@@ -267,7 +270,7 @@ elif PAGE == "verify":
         if unc and not go:
             names = "".join(f"<li>{p} ({i['state']})</li>" for p, i in GI_REGISTRY.items())
             st.markdown(f"""<div class="report"><div class="rhead" style="background:linear-gradient(135deg,#2b2a6b,#4a3f8f)">
-              <div class="v">Not covered yet</div><div class="s">“{unc['product']}” isn't one of the GI products we can verify automatically.</div></div>
+              <div class="v">Not covered yet</div><div class="s">“{E(unc['product'])}” isn't one of the GI products we can verify automatically.</div></div>
               <div class="rbody"><b>We currently verify:</b><ul style="color:#4b4458">{names}</ul>
               <p style="color:#6b6577;font-size:.9rem">You can still send this claim to one of our reviewers, who will check it manually.</p></div></div>""",
                         unsafe_allow_html=True)
@@ -312,12 +315,12 @@ elif PAGE == "verify":
             reg = next((e["data"] for e in res["evidence"] if e.get("tool") == "gi_registry_lookup" and e["ok"]), None)
             wv = WEAVERS.get((f.get("weaver_id") or "").upper())
             passed = sum(v["status"] == "pass" for v in c.values())
-            kv = [("Product", reg["product"] if reg else (f.get("product") or "—")),
+            kv = [("Product", reg["product"] if reg else E(f.get("product") or "—")),
                   ("GI status", gi_label(reg) if reg else "Not found"),
-                  ("Made in", ", ".join(filter(None, [f.get("region"), f.get("state")])) or "—"),
-                  ("Weaver", wv["name"] if wv else (f.get("weaver_id") or "Not provided"))]
+                  ("Made in", E(", ".join(filter(None, [f.get("region"), f.get("state")])) or "—")),
+                  ("Weaver", wv["name"] if wv else E(f.get("weaver_id") or "Not provided"))]
             rows = "".join(f'<div class="row"><div class="ic ic-{v["status"]}">{"✓" if v["status"]=="pass" else "✕" if v["status"]=="fail" else "?"}</div>'
-                           f'<div><div class="t">{CHECK_NAMES.get(k, k)}</div><div class="d">{v["why"]}</div></div></div>'
+                           f'<div><div class="t">{CHECK_NAMES.get(k, k)}</div><div class="d">{E(v["why"])}</div></div></div>'
                            for k, v in sorted(c.items(), key=lambda x: {"fail": 0, "unknown": 1, "pass": 2}[x[1]["status"]]))
             srcs = "".join(f"<span>📄 {n}</span>" for n in dict.fromkeys(friendly_source(s) for s in res["citations"])) or "<span>None</span>"
             ref = f" · Reference #{res['escalated']['queue_id']}" if res.get("escalated") else ""
@@ -368,11 +371,11 @@ elif PAGE == "track":
                 title = {"Supported": "✓ Confirmed authentic by reviewer", "Conflicting": "✕ Not authentic — reviewer decision",
                          "Insufficient": "? Reviewer could not confirm"}[cls]
                 when = time.strftime("%d %b %Y, %H:%M", time.localtime(d["decided"]))
-                body = f"Reviewer note: {d['note']}" if d["note"] else "No note added."
+                body = f"Reviewer note: {E(d['note'])}" if d["note"] else "No note added."
                 head = f'<div class="rhead r-{cls}"><div class="v">{title}</div><div class="s">Decided {when}</div></div>'
             elif qd:
                 head = ('<div class="rhead" style="background:linear-gradient(135deg,#2b2a6b,#4a3f8f)"><div class="v">⏳ Under expert review</div>'
-                        f'<div class="s">Queue #{qd["id"]} · reason: {qd["reason"]}</div></div>')
+                        f'<div class="s">Queue #{qd["id"]} · reason: {E(qd["reason"])}</div></div>')
                 body = "A reviewer will check the official records and the weaving cluster. Check back here for the decision."
             else:
                 cls = s["auto_verdict"].split()[0]
@@ -388,6 +391,27 @@ elif PAGE == "track":
 
 # =================================================================== ADMIN ==
 elif PAGE == "admin":
+    def _admin_password():
+        try:
+            return os.environ.get("LOOMTRACE_ADMIN_PASSWORD") or st.secrets.get("admin_password")
+        except Exception:
+            return os.environ.get("LOOMTRACE_ADMIN_PASSWORD")
+    _pw = _admin_password()
+    if not st.session_state.get("is_reviewer"):
+        st.markdown('<div class="sec" style="padding-top:28px"><div class="eyebrow">Reviewer dashboard</div>'
+                    '<h2>Reviewer sign-in</h2></div>', unsafe_allow_html=True)
+        if not _pw:
+            st.warning("The reviewer dashboard is disabled. Set the LOOMTRACE_ADMIN_PASSWORD environment "
+                       "variable (or admin_password in .streamlit/secrets.toml) and restart the app.")
+            footer(); st.stop()
+        with st.form("login"):
+            entered = st.text_input("Reviewer password", type="password")
+            if st.form_submit_button("Sign in", type="primary"):
+                if hmac.compare_digest(entered.encode(), _pw.encode()):
+                    st.session_state["is_reviewer"] = True
+                    st.rerun()
+                st.error("Incorrect password.")
+        footer(); st.stop()
     st.markdown('<div class="sec" style="padding-top:28px"><div class="eyebrow">Reviewer dashboard</div>'
                 '<h2>Cases & review queue</h2></div>', unsafe_allow_html=True)
     con = T._db()
@@ -409,25 +433,25 @@ elif PAGE == "admin":
             claim = json.loads(r["claim"])
             qid = int(r["id"])
             with st.container(border=True):
-                details = " · ".join(f"{k.replace('_', ' ')}: **{v}**" for k, v in claim.items()
+                details = " · ".join(f"{k.replace('_', ' ')}: **{E(str(v))}**" for k, v in claim.items()
                                      if v not in (None, "", True, False))
                 st.markdown(f"**#{qid} · {r['case_id']}**  \n{details}  \n"
-                            f"<span style='color:#b7791f;font-size:.88rem'>⚠ {r['reason']}</span>", unsafe_allow_html=True)
+                            f"<span style='color:#b7791f;font-size:.88rem'>⚠ {E(r['reason'])}</span>", unsafe_allow_html=True)
                 if r["status"] == "open":
                     note = st.text_input("Reviewer note (shown to the customer)", key=f"n{qid}",
                                          placeholder="e.g. Confirmed with the weavers' cooperative society")
                     b1, b2, b3 = st.columns(3)
                     if b1.button("✓ Confirm authentic", key=f"a{qid}", use_container_width=True):
-                        T.decide(qid, "Supported", note); st.rerun()
+                        st.session_state.get("is_reviewer") and T.decide(qid, "Supported", note); st.rerun()
                     if b2.button("✕ Not authentic", key=f"r{qid}", use_container_width=True):
-                        T.decide(qid, "Conflicting evidence", note); st.rerun()
+                        st.session_state.get("is_reviewer") and T.decide(qid, "Conflicting evidence", note); st.rerun()
                     if b3.button("? Cannot confirm", key=f"i{qid}", use_container_width=True):
-                        T.decide(qid, "Insufficient evidence", note); st.rerun()
+                        st.session_state.get("is_reviewer") and T.decide(qid, "Insufficient evidence", note); st.rerun()
                 elif qid in decs.index:
                     d = decs.loc[qid]
                     pill = {"Supported": "p-ok", "Conflicting evidence": "p-bad"}.get(d["decision"], "p-warn")
                     st.markdown(f"<span class='pill {pill}'>Reviewer: {d['decision']}</span> "
-                                f"<span style='color:#6b6577;font-size:.86rem'>{d['note'] or ''}</span>",
+                                f"<span style='color:#6b6577;font-size:.86rem'>{E(d['note'] or '')}</span>",
                                 unsafe_allow_html=True)
     with t2:
         if hist.empty:

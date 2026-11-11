@@ -15,6 +15,7 @@ Scope: 15 registered handloom GIs — Kancheepuram Silk (GI 15), Pochampalli Ika
 git clone https://github.com/hrterrain/loomtrace-agent.git && cd loomtrace-agent
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 export GROQ_API_KEY=...        # optional: enables Llama 3.1 8B (llama-3.1-8b-instant)
+export LOOMTRACE_ADMIN_PASSWORD=...   # required to open the reviewer (Admin) page
 .venv/bin/streamlit run app.py
 .venv/bin/python -m loomtrace.evaluate      # 45-case evaluation vs baseline
 .venv/bin/python -m loomtrace.experiments   # report numbers: 3 reps + A/B (re-plan loop on/off) -> results/

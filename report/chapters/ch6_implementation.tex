@@ -178,6 +178,10 @@ models; model output that does not parse as JSON is discarded.
 interface as ``not covered'' before the agent runs, with an option to send it to a reviewer.
 \item \textbf{Input handling.} Label text is treated only as data: it is parsed into fields and is never
 executed or used to select tools.
+\item \textbf{Output escaping and reviewer access.} Every user-supplied value (label fields, reasons and
+reviewer notes) is HTML-escaped before it is displayed, so that text in a claim cannot inject markup
+into the pages. The reviewer dashboard requires a password supplied through the environment variable
+\texttt{LOOMTRACE\_ADMIN\_PASSWORD}, and decisions are recorded only for a signed-in reviewer.
 \end{itemize}
 
 \section{User Interface}
@@ -193,11 +197,11 @@ The reviewer dashboard and the tracking page were shown in Figs.~\ref{fig:admin}
 \begin{figure}[H]
 \centering
 \begin{minipage}[t]{0.48\linewidth}\centering
-\includegraphics[width=\linewidth]{figures/ui_supported.png}\\[2pt]
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{figures/ui_supported.png}\\[2pt]
 {\footnotesize (a) Supported (alias resolved)}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\linewidth}\centering
-\includegraphics[width=\linewidth]{figures/ui_conflicting.png}\\[2pt]
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{figures/ui_conflicting.png}\\[2pt]
 {\footnotesize (b) Conflicting evidence (wrong region)}
 \end{minipage}
 \caption{Verification reports produced by the interface for two claims}

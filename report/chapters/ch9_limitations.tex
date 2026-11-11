@@ -83,7 +83,7 @@ by evidence.
 records are simulated, and the names are randomly combined from lists of common first names and
 surnames; they do not refer to real people. A real deployment would require consent from weavers and
 cooperatives, access control on the weaver registry and the review dashboard, and a retention policy
-for case data, which are not implemented here; the current Admin page has no authentication.
+for case data, which are only partly implemented here: the reviewer dashboard is protected by a single shared password read from an environment variable, and there are no individual reviewer accounts.
 
 \paragraph{Fairness.} Coverage is uneven: fifteen GIs are supported, the alias table reflects the names
 known to the team, and products from regions with less documentation are more likely to be marked

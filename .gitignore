@@ -10,3 +10,4 @@ report/*.toc
 report/*.lof
 report/*.lot
 report/*.out
+.streamlit/secrets.toml
