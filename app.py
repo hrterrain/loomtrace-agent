@@ -433,10 +433,13 @@ elif PAGE == "admin":
             claim = json.loads(r["claim"])
             qid = int(r["id"])
             with st.container(border=True):
-                details = " · ".join(f"{k.replace('_', ' ')}: **{E(str(v))}**" for k, v in claim.items()
+                # Rendered as a raw HTML block (starts with <div>) so Markdown syntax in user text is not
+                # interpreted; every user value is HTML-escaped.
+                details = " · ".join(f"{E(k.replace('_', ' '))}: <b>{E(str(v))}</b>" for k, v in claim.items()
                                      if v not in (None, "", True, False))
-                st.markdown(f"**#{qid} · {r['case_id']}**  \n{details}  \n"
-                            f"<span style='color:#b7791f;font-size:.88rem'>⚠ {E(r['reason'])}</span>", unsafe_allow_html=True)
+                st.markdown(f"<div><b>#{qid} · {E(r['case_id'])}</b><br>{details}<br>"
+                            f"<span style='color:#b7791f;font-size:.88rem'>⚠ {E(r['reason'])}</span></div>",
+                            unsafe_allow_html=True)
                 if r["status"] == "open":
                     note = st.text_input("Reviewer note (shown to the customer)", key=f"n{qid}",
                                          placeholder="e.g. Confirmed with the weavers' cooperative society")
@@ -450,8 +453,8 @@ elif PAGE == "admin":
                 elif qid in decs.index:
                     d = decs.loc[qid]
                     pill = {"Supported": "p-ok", "Conflicting evidence": "p-bad"}.get(d["decision"], "p-warn")
-                    st.markdown(f"<span class='pill {pill}'>Reviewer: {d['decision']}</span> "
-                                f"<span style='color:#6b6577;font-size:.86rem'>{E(d['note'] or '')}</span>",
+                    st.markdown(f"<div><span class='pill {pill}'>Reviewer: {E(d['decision'])}</span> "
+                                f"<span style='color:#6b6577;font-size:.86rem'>{E(d['note'] or '')}</span></div>",
                                 unsafe_allow_html=True)
     with t2:
         if hist.empty:
