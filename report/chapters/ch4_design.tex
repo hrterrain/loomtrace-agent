@@ -1,0 +1,280 @@
+%---------------------------------------------------------------------
+\chapter{Agent Design and Architecture}
+%---------------------------------------------------------------------
+
+This chapter presents the architecture of LoomTrace, describes each component shown in the
+architecture diagram, justifies the agentic patterns that were selected against the alternatives that
+were rejected, and describes the control flow, the shared state and the flow of data through the
+system for one concrete input.
+
+\section{System Architecture}
+
+Figure~\ref{fig:arch} shows the architecture of LoomTrace. A product claim enters at the top left and
+passes through six nodes of a state graph: \emph{Extract}, \emph{Planner}, the \emph{Retriever agent},
+the \emph{Verifier agent}, the \emph{Grader} and the \emph{Guardrail}. The retriever agent calls typed
+tools that read four data stores. The grader decides whether the evidence is sufficient; if it is not,
+control returns to the planner, at most three times in total. The guardrail issues the verdict with its
+citations, or escalates the case to a review queue, from which a human reviewer records the final
+decision. All nodes read and write a single shared state object, \texttt{CaseState}, which is saved to
+an SQLite database after every node.
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  font=\small, every node/.append style={execute at begin node=\setstretch{1.0}},
+  io/.style={draw=gray!70,fill=gray!8,rounded corners,minimum width=2.3cm,minimum height=1.0cm,align=center},
+  slm/.style={draw=Plum,fill=Plum!8,rounded corners,minimum width=2.3cm,minimum height=1.0cm,align=center},
+  agent/.style={draw=bmsblue,fill=guidebg,rounded corners,line width=1pt,minimum width=2.3cm,minimum height=1.0cm,align=center},
+  rule/.style={draw=ForestGreen,fill=dobg,minimum width=2.3cm,minimum height=1.0cm,align=center},
+  tool/.style={draw=ForestGreen,fill=dobg,minimum width=5.6cm,minimum height=1.0cm,align=center},
+  store/.style={draw=gray,fill=gray!10,cylinder,shape border rotate=90,aspect=0.18,minimum width=2.4cm,minimum height=1.1cm,align=center,font=\footnotesize},
+  human/.style={draw=BrickRed,fill=dontbg,rounded corners,minimum width=2.3cm,minimum height=1.0cm,align=center},
+  dec/.style={draw=bmsblue,fill=white,diamond,aspect=1.6,inner sep=1pt,align=center,font=\footnotesize},
+  arr/.style={-{Stealth[length=2.2mm]},thick},
+  lab/.style={font=\scriptsize,fill=white,inner sep=1pt}]
+
+% data stores (top)
+\node[store] (reg) at (9.0,4.8) {GI registry\\(IP India +\\PIB catalogue)};
+\node[store] (docs) at (12.25,4.8) {GI passages\\(BM25 index)};
+\node[store] (cen) at (15.5,4.8) {Census 2019--20;\\weaver + batch\\(simulated)};
+% tools
+\node[tool,minimum width=6.8cm] (tools) at (12.25,2.5) {Typed tools (Pydantic): \texttt{gi\_registry\_lookup},\\\texttt{gi\_doc\_search}, \texttt{census\_lookup}, \texttt{weaver\_lookup},\\\texttt{provenance\_lookup}};
+% main row
+\node[io] (in) at (0,0) {Product claim\\(label text /\\image)};
+\node[slm] (ext) at (3.5,0) {Extract\\(parser / OCR\\+ SLM)};
+\node[slm] (plan) at (7.0,0) {Planner\\(checks + query)};
+\node[agent] (ret) at (10.5,0) {Retriever\\agent};
+\node[agent] (ver) at (14.0,0) {Verifier\\agent};
+% second row
+\node[rule] (gr) at (14.0,-2.9) {Grader\\(grade 0--1)};
+\node[dec] (dec) at (10.0,-2.9) {Enough\\evidence?};
+\node[rule] (gd) at (5.5,-2.9) {Guardrail\\+ HITL gate};
+\node[io] (out) at (0,-2.9) {Cited verdict\\(3 classes)};
+% third row
+\node[store] (q) at (5.5,-5.6) {Review queue\\(SQLite)};
+\node[human] (hum) at (0,-5.6) {Human\\reviewer};
+\node[store,minimum width=4.6cm] (cp) at (12.0,-5.6) {CaseState checkpoints\\(SQLite, after every node)};
+
+% arrows main flow
+\draw[arr] (in) -- node[lab,above=2pt]{text} (ext);
+\draw[arr] (ext) -- node[lab,above=2pt]{fields} (plan);
+\draw[arr] (plan) -- node[lab,above=2pt]{plan} (ret);
+\draw[arr] (ret) -- node[lab,above=2pt]{evidence} (ver);
+\draw[arr] (ver) -- node[lab,right=2pt]{checks\{ \}} (gr);
+\draw[arr] (gr) -- node[lab,above=2pt]{grade} (dec);
+\draw[arr] (dec) -- node[lab,above=2pt]{yes / limit} (gd);
+\draw[arr] (gd) -- node[lab,above=2pt]{verdict} (out);
+\draw[arr,dashed,BrickRed] (dec.north) -- (dec.north |- 0,-1.45) -| node[lab,pos=0.3,below=2pt]{no: re-plan (iteration $<3$)} (plan.south);
+% tools
+\draw[arr,<->] (ret.north) -- node[lab,left=2pt]{call / result + source ID} (ret.north |- tools.south);
+\draw[arr] (tools.north -| reg) -- (reg.south);
+\draw[arr] (tools.north -| docs) -- (docs.south);
+\draw[arr] (tools.north -| cen) -- (cen.south);
+% HITL
+\draw[arr] (gd) -- node[lab,right=2pt,align=left]{\texttt{escalate\_to\_human}:\\insufficient, uncited\\or grade $<0.6$} (q);
+\draw[arr] (q) -- node[lab,above=2pt]{case + reason} (hum);
+\draw[arr] (hum) -- node[lab,left=2pt]{final decision + note} (out);
+% checkpoints
+\draw[arr,dotted,gray] (gr.south) -- node[lab,right=2pt]{state} (gr.south |- cp.north);
+
+% legend
+\node[slm,minimum width=1.2cm,minimum height=0.5cm,font=\scriptsize] (l1) at (0.2,5.0) {SLM step};
+\node[agent,minimum width=1.2cm,minimum height=0.5cm,font=\scriptsize,right=0.25cm of l1] (l2) {Agent};
+\node[rule,minimum width=1.2cm,minimum height=0.5cm,font=\scriptsize,below=0.25cm of l1] (l3) {Rules};
+\node[human,minimum width=1.2cm,minimum height=0.5cm,font=\scriptsize,right=0.25cm of l3] (l4) {Human};
+\end{tikzpicture}}
+\caption{Architecture of LoomTrace: six-node state graph, tools, data stores and human review}
+\label{fig:arch}
+\end{figure}
+
+\section{Component Description}
+
+Each component in Figure~\ref{fig:arch} is described below in terms of its responsibility, its inputs
+and outputs, the method it uses, and its behaviour on failure.
+
+\subsection{Product Claim Input and Extract Node}
+
+The input is the text of a product label or seller claim, optionally accompanied by a label image. The
+\emph{Extract} node calls the \texttt{extract\_label} tool, which produces a typed \texttt{LabelFields}
+object with the fields \texttt{product}, \texttt{region}, \texttt{state}, \texttt{material},
+\texttt{weaver\_id}, \texttt{batch\_id} and a Boolean \texttt{gi\_claim}. If an image is provided and the
+EasyOCR package~\cite{easyocr} is installed, the image text is recognised first. If an API key is
+configured, a small language model (SLM), Llama~3.1~8B~\cite{llama3}, is asked to return the fields as
+JSON. Otherwise, and whenever the model call fails, a deterministic parser reads ``key: value'' lines,
+recognises identifier patterns such as \texttt{WV-KAN-001} and \texttt{B-KAN-0010}, and falls back to
+searching the text for known product names. Missing fields are left empty rather than guessed, so that
+later nodes can treat them as unknown.
+
+\subsection{Planner}
+
+The planner decides which checks the claim requires and what to search for. Three checks are always
+planned (product registered, GI document support and census plausibility); region, state and material
+checks are planned only when the corresponding field is present; and four producer checks (weaver
+registered, weaver in the correct cluster, batch found, batch woven by the claimed weaver) are always
+planned so that their absence is visible. On the first iteration the planner requests an exact match in
+the registry and an unfiltered document search using the product name and region as the query. On a
+re-plan it resolves the product name to its registered form by matching the longest known alias, and
+builds a sharper query from the canonical name, region, state, registered materials and words that
+occur in statements of case (``geographical area weavers woven''), filtered to that product. If the
+product cannot be resolved, the second iteration records the product check as failed rather than
+looping indefinitely.
+
+\subsection{Retriever Agent and Tools}
+
+The retriever agent executes the plan by calling the tools listed in Table~\ref{tab:tools} in
+Chapter~6: \texttt{gi\_registry\_lookup}, \texttt{gi\_doc\_search}, \texttt{census\_lookup} and, when the
+identifiers are present, \texttt{weaver\_lookup} and \texttt{provenance\_lookup}. Every tool returns a
+typed \texttt{ToolResult} containing a success flag, the data, a source identifier, a note and the
+elapsed time. The retriever appends each result to the evidence list in the state, tagged with the
+iteration number. Tool failures, such as an unknown weaver identifier, are returned as results with
+\texttt{ok=false} and an explanatory note; they are never raised as exceptions, so that the verifier can
+reason about them.
+
+\subsection{Verifier Agent}
+
+The verifier agent judges the evidence of the current iteration. It runs up to ten rule-based checks
+and assigns each a status of \emph{pass}, \emph{fail} or \emph{unknown}, together with a plain-language
+reason and the source identifier on which the status rests. For example, the region check passes if
+the claimed region matches one of the registered districts, fails if it does not, and is unknown if
+the product could not be resolved; for GIs registered for a whole state, such as Muga Silk, the check
+compares the state instead. A claimed weaver who is not in the registry yields \emph{unknown} for the
+batch--weaver match rather than \emph{fail}, because a mismatch cannot be established against an
+unverified identity. Deterministic rules are used for these checks because they are exact and
+repeatable, which a small model is not.
+
+\subsection{Grader}
+
+The grader scores the evidence before any verdict is produced. It computes completeness $C$, the
+fraction of checks that are not unknown, and the citation fraction $Q$, the fraction of determinate
+checks that carry a source identifier. If no check has failed, the grade is $g = 0.7C + 0.3Q$; if a
+check has failed, the grade is $g = 0.5 + 0.5Q$, because a cited contradiction is strong evidence even
+when other checks are incomplete. The grader then decides whether to loop: it requests a re-plan if the
+product check or the document-support check is unknown, a product name is present, and fewer than three
+iterations have been used. Otherwise it passes control to the guardrail.
+
+\subsection{Guardrail and Human Review Gate}
+
+The guardrail converts the checks into a verdict: \emph{Conflicting evidence} if any check failed,
+\emph{Insufficient evidence} if any check is unknown, and \emph{Supported} only if every check passed.
+It then enforces two conditions: a decided verdict must have at least one citation, and its grade must
+be at least 0.6; if either condition fails, the verdict is downgraded to \emph{Insufficient evidence}.
+Every \emph{Insufficient evidence} verdict is passed to the \texttt{escalate\_to\_human} tool, which
+inserts the case, the extracted claim and the reason (for example, ``missing: weaver\_registered,
+batch\_found'') into the review queue. The guardrail also writes the case to the case history.
+
+\subsection{Review Queue and Human Reviewer}
+
+The review queue is a table in the SQLite database. A reviewer sees each open case with its details
+and reason, writes a note, and records one of three decisions (confirm authentic, not authentic, cannot
+confirm). The decision is stored in a separate table and becomes the final verdict for the case, and
+the requester can see it, with the note, by entering the case reference. A requester can also send a
+case that was decided automatically to the queue if they disagree with the result.
+
+\subsection{Data Stores and Checkpoints}
+
+The four data stores are the GI registry (fifteen products), the GI passage index (21 passages), the
+census table (31 rows) and the simulated weaver and batch records (180 and 360 records), described in
+Section~3.4. The \texttt{CaseState} checkpoint store is an SQLite table to which the full state is
+written after every node, giving each case its own memory and a durable history.
+
+\section{Selected Agentic Patterns and Justification}
+
+Table~\ref{tab:patterns} lists the patterns used, where each is applied, why it was chosen and which
+alternative was rejected.
+
+\begin{table}[H]
+\centering
+\caption{Agentic patterns and design justification}
+\label{tab:patterns}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{3.0cm}@{}}
+\toprule
+\textbf{Pattern} & \textbf{Where} & \textbf{Reason} & \textbf{Alternative rejected} \\ \midrule
+Tool use & Retriever agent & Facts must come from registry, census and producer records, each with a source identifier & Answering from model memory \\
+Agentic (corrective) RAG & Planner, retriever, grader & Labels use aliases; a weak first search must be detected and repeated with a sharper, filtered query~\cite{yan2024crag} & Single-shot retrieval \\
+Plan-and-execute with re-planning & Planner, grader loop & Applicable checks depend on which fields are present; steps are known, so they can be bounded and traced~\cite{wang2023plansolve} & Free-form ReAct loop~\cite{yao2023react} \\
+Supervisor multi-agent & Graph routes between retriever and verifier & One narrow responsibility per node: gathering evidence is separated from judging it & One node doing both \\
+Reflection (evidence grading) & Grader & Verdicts must not be issued on incomplete evidence~\cite{shinn2023reflexion} & No self-check \\
+HITL and guardrails & Guardrail, review queue & A wrong verdict harms a producer or a buyer; abstention is safer than a guess & Fully automatic decision \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The main design decision was to use an explicit graph with deterministic checks rather than a
+free-form ReAct agent. In a free-form agent, the model chooses which tool to call next and when to stop,
+which makes the number of steps unbounded and the trace harder to audit. In LoomTrace the sequence of
+nodes is fixed, only the plan contents and the loop decision vary, and the loop has a hard limit. A
+second decision was to keep model calls narrow. Small models are fast and inexpensive but are weaker at
+long, open-ended reasoning~\cite{liu2024lost}; giving the model only extraction and explanation, while
+rules perform the factual checks, keeps the system correct even when no model is available.
+
+\section{Control Flow and Agent State}
+
+Control moves through the graph as follows. The graph starts at \emph{Extract}, then runs
+\emph{Planner}, \emph{Retriever}, \emph{Verifier} and \emph{Grader} in sequence. A conditional edge
+after the grader routes to the planner when the grader's decision is ``re-plan'' and to the guardrail
+when it is ``finish''; the guardrail leads to the end of the graph. The loop terminates under exactly
+three conditions: (i) the product and document checks are both determinate; (ii) no product name was
+extracted, so re-planning cannot help; or (iii) the iteration counter has reached the limit of three
+iterations. In addition, LangGraph's recursion limit is set to 40 node executions as a second,
+independent bound. A full run without re-planning executes 6 nodes, and each re-plan adds 4 nodes.
+
+Table~\ref{tab:state} lists the fields of the shared state.
+
+\begin{table}[H]
+\centering
+\caption{Fields of the shared CaseState}
+\label{tab:state}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\ttfamily}l >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.6cm}@{}}
+\toprule
+\normalfont\textbf{Field} & \textbf{Content} & \textbf{Written by} \\ \midrule
+case\_id & Unique reference, e.g.\ \texttt{CASE-94767A68} & Input \\
+label\_text, image & Raw claim text and optional image bytes & Input \\
+fields & Extracted \texttt{LabelFields} & Extract \\
+plan, query, resolve\_aliases & Checks to run, search query, alias-resolution flag & Planner \\
+canonical & Registered product name, once resolved & Retriever \\
+evidence[ ] & Tool results with source IDs and iteration (append-only) & All tool-calling nodes \\
+checks\{ \} & Status, reason and source per check & Verifier \\
+grade, grade\_detail & Score 0--1, completeness, consistency, decision & Grader \\
+iteration & Planning iterations used (0--2) & Extract, Grader \\
+verdict, confidence, citations, rationale & Final output & Guardrail \\
+escalated & Review-queue entry, if any & Guardrail \\
+trace[ ] & One entry per node with a summary message (append-only) & All nodes \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The \texttt{evidence} and \texttt{trace} fields are declared with an additive reducer, so that each
+node appends to them instead of replacing them. This preserves the evidence of every iteration and
+makes the full history of a case available to the verifier, the interface and the checkpoint store.
+
+\section{Data Flow}
+
+The following example traces one real input through the system. The label reads ``Product: Kanjivaram
+Silk Saree; Region: Thiruvallur; State: Tamil Nadu; Material: mulberry silk; Weaver ID: WV-KAN-001;
+Batch ID: B-KAN-0010''.
+
+\begin{enumerate}[itemsep=2pt]
+\item \textbf{Extract} produces the six fields; the product is the alias ``Kanjivaram Silk Saree''.
+\item \textbf{Planner (iteration 0)} plans ten checks and the query ``Kanjivaram Silk Saree
+Thiruvallur'', with exact registry matching.
+\item \textbf{Retriever} calls five tools. The registry lookup fails (no exact match); the document
+search returns five passages, two from the Kancheepuram corpus and three from other products; the
+census, weaver and batch lookups succeed.
+\item \textbf{Verifier} reports 5 pass, 0 fail and 5 unknown: the product, region, state, material and
+cluster checks cannot be made without a registry entry.
+\item \textbf{Grader} computes completeness 0.5 and citation fraction 1.0, so $g = 0.65$; because the
+product check is unknown, it requests a re-plan.
+\item \textbf{Planner (iteration 1)} resolves the alias to ``Kancheepuram Silk'' and issues a query
+filtered to that product.
+\item \textbf{Retriever} now finds registry entry GI~15 and three Kancheepuram passages.
+\item \textbf{Verifier} reports 10 pass, 0 fail, 0 unknown; \textbf{Grader} computes $g = 1.0$ and
+finishes.
+\item \textbf{Guardrail} issues \emph{Supported} with seven citations: three GI passages, the registry
+entry, the Tamil Nadu census row, and the weaver and batch records.
+\end{enumerate}
+
+The case executed ten nodes, made eleven tool calls and wrote ten checkpoints. The complete trace of
+this run is given in Listing~\ref{lst:replan} in Chapter~5.

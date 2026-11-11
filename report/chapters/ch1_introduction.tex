@@ -1,0 +1,139 @@
+%---------------------------------------------------------------------
+\chapter{Introduction}
+%---------------------------------------------------------------------
+
+This chapter introduces the handloom sector and the problem of verifying Geographical Indication (GI)
+claims on handloom products. It states the decision that the proposed agent supports, explains why an
+agentic design is needed rather than a script or a single language-model prompt, and sets out the
+objectives and scope of the project.
+
+\section{Background}
+
+A Geographical Indication is a sign used on goods that have a specific geographical origin and that
+possess qualities, a reputation or characteristics essentially attributable to that origin. The
+Agreement on Trade-Related Aspects of Intellectual Property Rights (TRIPS) requires member countries
+to provide legal means to prevent the use of a geographical indication on goods that do not originate
+in the indicated area~\cite{trips}. In India this obligation is implemented by the Geographical
+Indications of Goods (Registration and Protection) Act, 1999, under which a GI is registered by an
+association of producers, and individual producers may in turn be registered as authorised
+users~\cite{giact1999}. Registrations are maintained by the Geographical Indications Registry of the
+Office of the Controller General of Patents, Designs and Trade Marks, commonly referred to as IP
+India~\cite{ipindia}.
+
+Handloom textiles form one of the largest groups of registered Indian GIs. Products such as
+Kancheepuram Silk from Tamil Nadu, Pochampalli Ikat from Telangana, Banaras Brocades and Sarees from
+Uttar Pradesh, Sambalpuri Bandha from Odisha and Chanderi Sarees from Madhya Pradesh are each tied to
+named districts, weaving communities, materials and techniques~\cite{ipindia,pibgi}. The sector is
+large and dispersed: according to the Fourth All India Handloom Census 2019--20, India has
+26,73,891 handloom weavers and 8,48,621 allied workers, with the largest weaver populations in
+Assam (11,07,428), West Bengal (3,66,656) and Manipur (2,12,481)~\cite{pibcensus}. For the three
+products on which this project was first scoped, the census records 1,97,818 handloom weavers in
+Tamil Nadu, 25,930 in Telangana and 1,30,778 in Uttar Pradesh~\cite{pibcensus}.
+
+Because a GI signals both origin and traditional method, a GI claim adds commercial value to a product,
+and it is used prominently in product descriptions, labels and online listings. The Ministry of
+Textiles operates certification schemes such as the Handloom Mark and the India Handloom Brand to help
+buyers identify genuine handloom goods~\cite{handloommark}. However, a buyer or a marketplace operator
+who sees the claim ``GI-tagged Kanjivaram silk saree'' on a listing still has to establish several
+separate facts before trusting it: that the product name corresponds to a registered GI, that the
+stated place of manufacture lies within the registered geographical area, that the materials are
+consistent with the registered description, and that the weaver and production batch can be traced to
+the relevant weaving cluster.
+
+\section{Problem Statement}
+
+A buyer, marketplace moderator or cooperative officer who receives a handloom product with a GI-tag
+claim has no single place to check whether the claim is supported. The necessary evidence is spread
+across the GI registration list, the statement of case in each GI application, the national handloom
+census and producer-level weaver and batch records, and the product label itself may use a local
+name (``Kanjivaram'' instead of ``Kancheepuram Silk''), omit identifiers, or contain details that
+contradict the registration. Checking these sources manually is slow and inconsistent, and an
+unsupported claim may be accepted while a genuine product with incomplete paperwork may be wrongly
+rejected. \textbf{The decision supported by this project is: is this handloom product's GI-tag claim
+supported by the available official evidence, contradicted by it, or not decidable without a human
+reviewer?}
+
+\section{Motivation and Why Agentic AI}
+
+Three simpler alternatives were considered before an agentic design was adopted.
+
+\paragraph{A fixed rule script.} A script could compare a structured form against a lookup table.
+However, product labels are free text, products are referred to by local names and spellings
+(``Pochampally'', ``Ikkat'', ``Banarasi''), and the set of checks that is meaningful depends on which
+fields are present: a label without a batch number cannot be checked against provenance records, and
+a product that is registered for a whole state (for example, Muga Silk of Assam) must be checked
+differently from one registered for specific districts. A fixed pipeline either fails on such inputs or
+silently skips checks.
+
+\paragraph{A single language-model prompt.} A large language model (LLM) asked ``is this saree
+authentic?'' will answer from its training data. It cannot consult the current registry, it cannot
+query producer records, and its output cannot be traced to a source. Language models are known to
+produce fluent but unsupported statements~\cite{ji2023hallucination}, and smaller models are
+particularly weak when relevant facts are buried in long contexts~\cite{liu2024lost}. For a decision
+that affects a producer's reputation, an answer without citations is not acceptable.
+
+\paragraph{Plain retrieval followed by one answer.} A single document lookup followed by one decision
+improves grounding, but it cannot notice that its first search failed (for example, because the label
+used an alias), and it has no mechanism to stop and ask a human when evidence is missing. Chapter~7
+shows that such a baseline marks every case in the test set as ``Supported''.
+
+The problem therefore requires several capabilities that together motivate an agentic design. It
+requires \emph{tool use}, because facts must come from registry, census and producer records rather
+than from model memory~\cite{schick2023toolformer}. It requires \emph{retrieval over official
+documents}, so that every verdict can cite the registered description~\cite{lewis2020rag}. It requires
+\emph{planning and re-planning}, because the checks needed differ by claim and a weak first search must
+be detected and repeated with a better query~\cite{yan2024crag}. It requires \emph{evidence grading
+(reflection)} before a verdict is issued, so that the agent does not guess when evidence is incomplete.
+Finally, it requires \emph{human-in-the-loop (HITL) escalation}, because abstaining and referring a case
+to a reviewer is safer than wrongly certifying or wrongly rejecting a product.
+
+\section{Objectives}
+
+The objectives of the project are as follows.
+
+\begin{enumerate}[itemsep=2pt]
+\item To design an agent, implemented as a state graph, that verifies a handloom GI claim against
+official GI and census data and producer records, and returns one of three advisory verdicts with
+citations.
+\item To implement seven typed tools and retrieval over official GI text, with a bounded re-planning
+loop (at most three iterations) that refines the search when the first attempt is weak.
+\item To implement a guardrail and a human review workflow so that every case without sufficient,
+cited evidence is routed to a reviewer, whose decision is recorded and visible to the requester.
+\item To record a step-level trace and a persistent checkpoint for every node of every run.
+\item To evaluate the agent on a labelled set of 45 cases against a single-lookup baseline, with
+targets of at least 80\% verdict accuracy and at least 90\% correct abstention.
+\item To measure, through a controlled A/B experiment, the effect of the re-planning loop on accuracy,
+latency and tool usage.
+\end{enumerate}
+
+\section{Scope of the Project}
+
+\paragraph{Included.} The system verifies GI-tag claims for fifteen registered handloom GIs: the three
+products named in the project's design document (Kancheepuram Silk, Pochampalli Ikat, and Banaras
+Brocades and Sarees) and twelve further handloom GIs whose geographical area and materials are stated
+in a Government of India GI catalogue~\cite{pibgi}. Input is a product label or seller claim
+containing some or all of the following fields: product name, region, state, material, weaver
+identifier and batch identifier. Output is an advisory verdict with the list of checks performed and
+the sources cited. The system includes a web interface for requesters, a reviewer dashboard, and an
+offline evaluation harness.
+
+\paragraph{Excluded.} The system does not issue legal certification and does not replace the GI
+Registry or the authorised-user process under the GI Act~\cite{giact1999}. It does not physically
+inspect textiles. It does not access live government portals at run time; reference data are stored
+locally. Individual weaver and batch records are not publicly available, and the records used are
+simulated, as stated in Section~3.4. Products outside the fifteen GIs are reported as ``not covered''
+and may be sent to a reviewer, but they are not verified automatically. Label images are supported
+only when the optional optical character recognition (OCR) package is installed, and this path was not
+part of the evaluation.
+
+\section{Organisation of the Report}
+
+Chapter~2 reviews how GI claims are verified in practice and the technical literature on tool use,
+retrieval, planning, reflection and evaluation. Chapter~3 states the stakeholders, requirements and
+data sources. Chapter~4 presents the architecture of LoomTrace, its components, the agentic patterns
+chosen and the control and data flow. Chapter~5 maps the system to the agentic concepts of the course
+with evidence from real runs. Chapter~6 describes the implementation, including the technology stack,
+the agent loop, the tools, the guardrails and the user interface. Chapter~7 describes tracing and
+reports the evaluation against a baseline, and Chapter~8 reports the A/B experiment on the re-planning
+loop. Chapter~9 discusses limitations, failure modes and ethical considerations, and Chapter~10
+concludes with future work.

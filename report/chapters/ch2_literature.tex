@@ -1,0 +1,154 @@
+%---------------------------------------------------------------------
+\chapter{Literature Survey and Existing Practice}
+%---------------------------------------------------------------------
+
+This chapter first describes how GI claims on handloom products are established and checked in
+practice, and then reviews the technical literature on the agentic techniques used in LoomTrace. It
+ends with a comparative summary and a statement of the gap that the project addresses.
+
+\section{Existing Practice in the Sector}
+
+\subsection{Legal basis of a GI claim}
+
+Under the Geographical Indications of Goods (Registration and Protection) Act, 1999, a GI is
+registered for a class of goods and a defined geographical area on the application of an association
+of persons or producers. The application contains a \emph{statement of case} that describes the
+product, the geographical area, the method of production, the materials and the link between the
+product and its origin~\cite{giact1999}. After registration, producers within the area may apply to
+be registered as \emph{authorised users}, and only the registered proprietor and authorised users have
+the right to use the indication. The registry and its records are maintained by IP India~\cite{ipindia}.
+The international basis for this protection is Section~3 of the TRIPS Agreement, which defines
+geographical indications and obliges members to prevent misleading use of them~\cite{trips}.
+
+\subsection{How a claim is checked today}
+
+In practice, the verification of a GI claim at the point of sale is manual and fragmented. A buyer in
+a shop or on an online marketplace sees a product description or label. To check the claim, the buyer
+or a marketplace moderator must find the corresponding GI registration and its application number,
+read the statement of case to learn the registered area and materials, and compare these with the
+place and materials stated by the seller. Where producer details are provided, they must be checked
+against cooperative or weaver records, which are not published centrally. The Ministry of Textiles
+supports buyer confidence through separate labelling schemes, notably the Handloom Mark, which
+certifies that a product is handwoven, and the India Handloom Brand, which certifies quality and
+process standards~\cite{handloommark}. These labels are useful signals, but they do not certify that a
+product falls within a particular GI, and they are not linked to the GI registry in a way that a buyer
+can query.
+
+Government publications provide some of the reference data needed for verification. The TRIFED GI
+catalogue published through the Press Information Bureau (PIB) lists registered GI products marketed
+by Tribes India together with short descriptions of their place of production and
+materials~\cite{pibgi}. The state-wise results of the Fourth All India Handloom Census 2019--20,
+published as a PIB annexure, give the number of handloom weavers and allied workers in each state and
+union territory~\cite{pibcensus}. These sources are authoritative but are distributed as separate PDF
+documents with different structures, and none of them is designed to answer the question ``is this
+particular claim supported?''.
+
+\subsection{Where current practice fails}
+
+Three weaknesses of current practice motivate this project. First, the evidence is spread across
+several documents that must be read together, so a complete check is slow and is rarely performed
+for an individual purchase. Second, product names on labels and listings frequently differ from the
+registered names, which makes simple string search unreliable. Third, when information is missing,
+there is no defined route for escalation: the checker must either accept or reject the claim without
+evidence, or abandon the check. A system that collects the evidence, explains which checks passed and
+failed, and routes undecidable cases to a person addresses all three weaknesses.
+
+\section{Related Technical Work}
+
+The technical literature relevant to LoomTrace is organised below into four themes: reasoning and
+acting with tools; retrieval-augmented generation; planning, reflection and multi-agent
+collaboration; and the evaluation of systems built on language models.
+
+\subsection{Reasoning and Acting with Tools}
+
+Yao \emph{et al.}~\cite{yao2023react} proposed ReAct, in which a language model interleaves
+free-text reasoning steps with actions such as search queries, so that it can gather information
+before answering. Schick \emph{et al.}~\cite{schick2023toolformer} showed that a language model can
+learn to decide when to call external tools such as calculators and search engines, and how to use
+their results. Both works establish that grounding a model's output in tool results reduces reliance
+on memorised knowledge. LoomTrace adopts the tool-use principle, since every fact used in a verdict is
+returned by a typed tool with a source identifier. It does not, however, adopt free-form interleaving
+of thought and action: the sequence of nodes is fixed by an explicit graph, so that every run can be
+traced, bounded and checkpointed. This trade-off favours auditability over flexibility, which suits a
+verification task whose steps are known in advance.
+
+\subsection{Retrieval-Augmented Generation}
+
+Lewis \emph{et al.}~\cite{lewis2020rag} introduced retrieval-augmented generation (RAG), which
+conditions a generator on passages retrieved from an external corpus, and showed gains on
+knowledge-intensive tasks. Gao \emph{et al.}~\cite{gao2023ragsurvey} survey later developments and
+distinguish naive RAG, which retrieves once, from advanced and modular variants that rewrite queries,
+re-rank results and retrieve iteratively. Two adaptive variants are particularly relevant. Self-RAG,
+proposed by Asai \emph{et al.}~\cite{asai2024selfrag}, trains a model to decide when to retrieve and to
+critique its own output with reflection tokens. Corrective RAG, proposed by Yan
+\emph{et al.}~\cite{yan2024crag}, adds a lightweight evaluator that grades retrieved documents and
+triggers corrective actions, such as a new search, when retrieval is weak. LoomTrace follows the
+corrective pattern: its grader detects when the registry lookup or the document search did not
+resolve the product, and the planner then re-queries with the canonical product name and a filter on
+that product. For ranking, LoomTrace uses the BM25 function from the probabilistic relevance
+framework of Robertson and Zaragoza~\cite{robertson2009bm25}, which is fast, transparent and effective
+on short, keyword-rich official passages.
+
+\subsection{Planning, Reflection and Multi-Agent Collaboration}
+
+Wang \emph{et al.}~\cite{wang2023plansolve} proposed plan-and-solve prompting, in which a model first
+devises a plan that divides a task into subtasks and then executes it, which reduces missed steps
+compared with direct reasoning. Shinn \emph{et al.}~\cite{shinn2023reflexion} proposed Reflexion, in
+which an agent evaluates its own attempt and uses verbal feedback to improve the next attempt. Wu
+\emph{et al.}~\cite{wu2023autogen} presented AutoGen, a framework in which several specialised agents
+converse to complete a task. A survey by Wang \emph{et al.}~\cite{wang2024survey} organises agents built
+on language models by their profile, memory, planning and action modules. LoomTrace draws on each of
+these ideas in a constrained form. A planner decides which checks a claim requires; a grader evaluates
+the evidence before any verdict is produced and can send control back to the planner; and the
+gathering of evidence and the judging of evidence are assigned to two separate nodes, a retriever agent
+and a verifier agent, with the graph acting as the supervisor that routes between them.
+
+\subsection{Evaluation of LLM-Based Systems}
+
+Zheng \emph{et al.}~\cite{zheng2023judge} studied the use of strong language models as judges of other
+models' outputs and reported high agreement with human preferences, while documenting position,
+verbosity and self-enhancement biases. Ji \emph{et al.}~\cite{ji2023hallucination} survey hallucination
+in natural language generation and emphasise that fluency is not evidence of faithfulness. Liu
+\emph{et al.}~\cite{liu2024lost} show that models use information at the beginning and end of long
+contexts better than information in the middle. For LoomTrace, these findings have two consequences.
+First, because each verdict is one of three discrete labels and each check has a deterministic expected
+outcome, the system is evaluated with exact-match metrics against hand-assigned labels rather than with
+a model judge. Second, the design keeps every model call narrow and short and assigns the factual checks
+to deterministic rules, which is consistent with the known weaknesses of small models on long inputs.
+
+\section{Comparative Summary}
+
+Table~\ref{tab:lit} compares the most relevant approaches with LoomTrace on four properties: whether
+the approach calls external tools, whether retrieval is adaptive (graded and repeated when weak),
+whether it includes a human escalation path, and whether every decision is accompanied by citations to
+sources.
+
+\begin{table}[H]
+\centering
+\caption{Comparison of related approaches with the proposed system}
+\label{tab:lit}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.2cm} >{\raggedright\arraybackslash}X c c c c@{}}
+\toprule
+\textbf{Work} & \textbf{Key idea} & \textbf{Tools} & \textbf{Adapt. RAG} & \textbf{HITL} & \textbf{Cited} \\ \midrule
+ReAct~\cite{yao2023react} & Interleaved reasoning and acting & \checkmark & -- & -- & -- \\
+Toolformer~\cite{schick2023toolformer} & Self-taught tool calling & \checkmark & -- & -- & -- \\
+RAG~\cite{lewis2020rag} & Retrieval-conditioned generation & -- & -- & -- & \checkmark \\
+Self-RAG~\cite{asai2024selfrag} & Learned retrieval and self-critique & -- & \checkmark & -- & \checkmark \\
+CRAG~\cite{yan2024crag} & Retrieval grading and correction & -- & \checkmark & -- & \checkmark \\
+Reflexion~\cite{shinn2023reflexion} & Verbal self-feedback across attempts & \checkmark & -- & -- & -- \\
+Manual GI check~\cite{giact1999,ipindia} & Person reads registry and records & -- & -- & \checkmark & \checkmark \\
+\textbf{LoomTrace (ours)} & Graph agent with graded re-query and review queue & \checkmark & \checkmark & \checkmark & \checkmark \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Research Gap}
+
+As Table~\ref{tab:lit} shows, the general agent techniques reviewed provide tool use, adaptive
+retrieval or self-critique individually, but they are not applied to GI verification, and none of them
+defines an escalation path to a human reviewer. Manual verification provides human judgement and
+citations but does not scale and has no structured way of handling missing information. No reviewed
+approach combines retrieval over official GI text, structured checks against registry, census and
+producer records, a bounded re-planning loop, and a human review workflow in a single traceable
+system for handloom GI claims; LoomTrace is designed to address this gap.

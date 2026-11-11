@@ -1,0 +1,6 @@
+streamlit
+langgraph
+pydantic>=2
+pandas
+groq
+# optional: easyocr (label OCR)

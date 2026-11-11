@@ -1,0 +1,91 @@
+%---------------------------------------------------------------------
+\chapter{Limitations, Ethics and Safety}
+%---------------------------------------------------------------------
+
+This chapter states the limitations of the data, the method and the evaluation, lists the ways in
+which the agent can fail together with the guardrail that addresses each, and discusses the ethical
+considerations of a system whose output affects producers and buyers.
+
+\section{Limitations}
+
+\paragraph{Data.} The producer-level evidence, the weaver registry and the batch records, is simulated.
+Real individual records are not published, so the weaver and batch checks demonstrate the mechanism
+but say nothing about the availability or quality of real records. The GI description passages for the
+three original products were written by the team as summaries and their page references are
+indicative; they were not extracted from the scanned GI application documents. For the twelve products
+taken from the government GI catalogue, the descriptions are short and the catalogue does not give GI
+application numbers. The registry stores one current state per product, so historical state names, such
+as Andhra Pradesh for products now in Telangana, are not recognised.
+
+\paragraph{Method.} All factual checks are deterministic string comparisons. As shown in
+Table~\ref{tab:probes}, spelling variants of districts, state abbreviations and aliases that are not in
+the alias table lead to wrong \emph{Conflicting} verdicts. Retrieval uses BM25 over 21 short passages,
+which is adequate for this corpus but would not scale to the full text of GI applications without dense
+retrieval and chunking. The language-model path for extraction and explanation is implemented but was
+not evaluated, and the OCR path for label images was not installed or tested. The durable-workflow
+support stores every state but does not resume interrupted runs automatically.
+
+\paragraph{Evaluation.} The 45-case golden set and the 15 demonstration cases were constructed by the
+team from the same rules and records that the agent uses, the labels were assigned by construction
+rather than by independent annotators, and one rule was changed after the first evaluation run. The
+100\% accuracy therefore shows that the agent behaves as designed on controlled cases; it is not an
+estimate of accuracy on real marketplace listings. Citation faithfulness was not measured. The golden
+set covers three of the fifteen products. The single-lookup baseline is weak by design.
+
+\section{Failure Modes and Guardrails}
+
+Table~\ref{tab:failures} pairs each identified failure mode with its mitigation.
+
+\begin{table}[H]
+\centering
+\caption{Failure modes and mitigations}
+\label{tab:failures}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Failure mode} & \textbf{Mitigation} \\ \midrule
+Verdict issued without evidence & Citation gate: a decided verdict needs at least one source ID and a grade $\geq 0.6$, otherwise it is downgraded to \emph{Insufficient} and escalated \\
+Weak or off-product retrieval & Grader detects unresolved product or weak search; planner re-queries with canonical name and product filter; maximum three iterations \\
+Unbounded looping or tool calls & Iteration limit of 3 and a graph recursion limit of 40; observed maximum 2 iterations and 11 tool calls \\
+Missing weaver or batch details & Checks marked \emph{unknown}, never \emph{pass}; case escalated to review with the missing items listed \\
+Typing error in an identifier & Unknown identifier gives \emph{unknown}, not \emph{fail}; batch mismatch is not asserted against an unverified weaver \\
+Spelling variants causing false conflicts (observed, Table~\ref{tab:probes}) & Not yet mitigated in the agent; planned fuzzy matching with an \emph{unknown} band, and abbreviation and former-name tables (Section~10.2) \\
+Product outside the covered GIs & Interface reports ``not covered'' before the agent runs and offers referral to a reviewer \\
+Model returns malformed or invented fields & JSON mode, Pydantic validation and deterministic fall-back parser; the model never performs factual checks \\
+Instructions embedded in label text (prompt injection) & Label text is only parsed into fields; tools are fixed by the graph, not chosen by the model; the explanation prompt receives only check statuses, source IDs and tool notes \\
+Reviewer error or bias & Reviewer must record a note; the decision is stored with the automated verdict, so both remain auditable \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Ethical and Responsible-Use Considerations}
+
+\paragraph{Who could be harmed.} A wrong \emph{Conflicting} verdict on a genuine product could damage the
+reputation and sales of a weaver who is legitimately entitled to the GI, and Chapter~7 showed that
+spelling variants can produce exactly this error. A wrong \emph{Supported} verdict would mislead a buyer
+and undermine the value of the GI for all producers in the region. The design therefore treats a false
+\emph{Supported} verdict as the most serious error, and none occurred in the evaluation; the observed
+false \emph{Conflicting} verdicts on realistic spelling variants are the most important weakness to
+correct before any real use.
+
+\paragraph{Advisory status.} Every verdict is labelled in the interface as ``advisory result based on
+available records --- not a legal certification''. Authority over GI registration and authorised use
+rests with the GI Registry under the GI Act~\cite{giact1999}, and the system does not claim to replace
+it. Every verdict shows the checks performed and the sources used, so that a user can see why it was
+reached, and any user can send a decided case to a human reviewer.
+
+\paragraph{Human oversight.} Cases that the agent cannot decide are never resolved automatically. They
+are routed to a reviewer, whose decision and note are stored separately from the automated verdict and
+shown to the requester. This keeps a person accountable for every decision that is not fully supported
+by evidence.
+
+\paragraph{Privacy.} Weaver records can contain personal information. In this project, all weaver
+records are simulated, and the names are randomly combined from lists of common first names and
+surnames; they do not refer to real people. A real deployment would require consent from weavers and
+cooperatives, access control on the weaver registry and the review dashboard, and a retention policy
+for case data, which are not implemented here; the current Admin page has no authentication.
+
+\paragraph{Fairness.} Coverage is uneven: fifteen GIs are supported, the alias table reflects the names
+known to the team, and products from regions with less documentation are more likely to be marked
+\emph{Insufficient} or ``not covered''. This should be reduced by extending coverage with producer
+associations rather than by relaxing the checks.

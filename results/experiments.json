@@ -1,0 +1,1448 @@
+{
+ "timestamp": "2026-11-11 18:25:21",
+ "reps": 3,
+ "variant_B": [
+  {
+   "n": 45,
+   "accuracy": 1.0,
+   "macro_f1": 1.0,
+   "abstention": 1.0,
+   "false_supported": 0,
+   "per_class": {
+    "Supported": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 15,
+     "fp": 0,
+     "fn": 0
+    },
+    "Conflicting evidence": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 15,
+     "fp": 0,
+     "fn": 0
+    },
+    "Insufficient evidence": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 15,
+     "fp": 0,
+     "fn": 0
+    }
+   },
+   "confusion": {
+    "Supported": {
+     "Supported": 15,
+     "Conflicting evidence": 0,
+     "Insufficient evidence": 0
+    },
+    "Conflicting evidence": {
+     "Supported": 0,
+     "Conflicting evidence": 15,
+     "Insufficient evidence": 0
+    },
+    "Insufficient evidence": {
+     "Supported": 0,
+     "Conflicting evidence": 0,
+     "Insufficient evidence": 15
+    }
+   },
+   "per_product_acc": {
+    "Banaras Brocades and Sarees": 1.0,
+    "Kancheepuram Silk": 1.0,
+    "Pochampalli Ikat": 1.0
+   },
+   "recall5": 1.0,
+   "citation_rate": 1.0,
+   "mean_cites": 6.533333333333333,
+   "lat_mean_ms": 20.660823199432343,
+   "lat_sd_ms": 55.970985237347485,
+   "lat_max_ms": 391.5053340024315,
+   "lat_p95_ms": 17.978500000026543,
+   "tool_calls_mean": 7.066666666666666,
+   "tool_calls_max": 11,
+   "nodes_mean": 6.8,
+   "replanned_cases": 9,
+   "escalated": 15
+  },
+  {
+   "n": 45,
+   "accuracy": 1.0,
+   "macro_f1": 1.0,
+   "abstention": 1.0,
+   "false_supported": 0,
+   "per_class": {
+    "Supported": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 15,
+     "fp": 0,
+     "fn": 0
+    },
+    "Conflicting evidence": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 15,
+     "fp": 0,
+     "fn": 0
+    },
+    "Insufficient evidence": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 15,
+     "fp": 0,
+     "fn": 0
+    }
+   },
+   "confusion": {
+    "Supported": {
+     "Supported": 15,
+     "Conflicting evidence": 0,
+     "Insufficient evidence": 0
+    },
+    "Conflicting evidence": {
+     "Supported": 0,
+     "Conflicting evidence": 15,
+     "Insufficient evidence": 0
+    },
+    "Insufficient evidence": {
+     "Supported": 0,
+     "Conflicting evidence": 0,
+     "Insufficient evidence": 15
+    }
+   },
+   "per_product_acc": {
+    "Banaras Brocades and Sarees": 1.0,
+    "Kancheepuram Silk": 1.0,
+    "Pochampalli Ikat": 1.0
+   },
+   "recall5": 1.0,
+   "citation_rate": 1.0,
+   "mean_cites": 6.533333333333333,
+   "lat_mean_ms": 13.77543988896327,
+   "lat_sd_ms": 3.1536561779201997,
+   "lat_max_ms": 21.302125001966488,
+   "lat_p95_ms": 20.0921669966192,
+   "tool_calls_mean": 7.066666666666666,
+   "tool_calls_max": 11,
+   "nodes_mean": 6.8,
+   "replanned_cases": 9,
+   "escalated": 15
+  },
+  {
+   "n": 45,
+   "accuracy": 1.0,
+   "macro_f1": 1.0,
+   "abstention": 1.0,
+   "false_supported": 0,
+   "per_class": {
+    "Supported": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 15,
+     "fp": 0,
+     "fn": 0
+    },
+    "Conflicting evidence": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 15,
+     "fp": 0,
+     "fn": 0
+    },
+    "Insufficient evidence": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "tp": 15,
+     "fp": 0,
+     "fn": 0
+    }
+   },
+   "confusion": {
+    "Supported": {
+     "Supported": 15,
+     "Conflicting evidence": 0,
+     "Insufficient evidence": 0
+    },
+    "Conflicting evidence": {
+     "Supported": 0,
+     "Conflicting evidence": 15,
+     "Insufficient evidence": 0
+    },
+    "Insufficient evidence": {
+     "Supported": 0,
+     "Conflicting evidence": 0,
+     "Insufficient evidence": 15
+    }
+   },
+   "per_product_acc": {
+    "Banaras Brocades and Sarees": 1.0,
+    "Kancheepuram Silk": 1.0,
+    "Pochampalli Ikat": 1.0
+   },
+   "recall5": 1.0,
+   "citation_rate": 1.0,
+   "mean_cites": 6.533333333333333,
+   "lat_mean_ms": 15.75511484455395,
+   "lat_sd_ms": 3.584362955174955,
+   "lat_max_ms": 24.613542002043687,
+   "lat_p95_ms": 22.806041000876576,
+   "tool_calls_mean": 7.066666666666666,
+   "tool_calls_max": 11,
+   "nodes_mean": 6.8,
+   "replanned_cases": 9,
+   "escalated": 15
+  }
+ ],
+ "variant_A": [
+  {
+   "n": 45,
+   "accuracy": 0.8,
+   "macro_f1": 0.8027065527065527,
+   "abstention": 1.0,
+   "false_supported": 0,
+   "per_class": {
+    "Supported": {
+     "precision": 1.0,
+     "recall": 0.6,
+     "f1": 0.7499999999999999,
+     "tp": 9,
+     "fp": 0,
+     "fn": 6
+    },
+    "Conflicting evidence": {
+     "precision": 1.0,
+     "recall": 0.8,
+     "f1": 0.888888888888889,
+     "tp": 12,
+     "fp": 0,
+     "fn": 3
+    },
+    "Insufficient evidence": {
+     "precision": 0.625,
+     "recall": 1.0,
+     "f1": 0.7692307692307693,
+     "tp": 15,
+     "fp": 9,
+     "fn": 0
+    }
+   },
+   "confusion": {
+    "Supported": {
+     "Supported": 9,
+     "Conflicting evidence": 0,
+     "Insufficient evidence": 6
+    },
+    "Conflicting evidence": {
+     "Supported": 0,
+     "Conflicting evidence": 12,
+     "Insufficient evidence": 3
+    },
+    "Insufficient evidence": {
+     "Supported": 0,
+     "Conflicting evidence": 0,
+     "Insufficient evidence": 15
+    }
+   },
+   "per_product_acc": {
+    "Banaras Brocades and Sarees": 0.8,
+    "Kancheepuram Silk": 0.8,
+    "Pochampalli Ikat": 0.8
+   },
+   "recall5": 1.0,
+   "citation_rate": 1.0,
+   "mean_cites": 6.4,
+   "lat_mean_ms": 11.278788000183543,
+   "lat_sd_ms": 0.643697504096395,
+   "lat_max_ms": 12.857125002483372,
+   "lat_p95_ms": 12.375334001262672,
+   "tool_calls_mean": 6.266666666666667,
+   "tool_calls_max": 7,
+   "nodes_mean": 6,
+   "replanned_cases": 0,
+   "escalated": 24
+  },
+  {
+   "n": 45,
+   "accuracy": 0.8,
+   "macro_f1": 0.8027065527065527,
+   "abstention": 1.0,
+   "false_supported": 0,
+   "per_class": {
+    "Supported": {
+     "precision": 1.0,
+     "recall": 0.6,
+     "f1": 0.7499999999999999,
+     "tp": 9,
+     "fp": 0,
+     "fn": 6
+    },
+    "Conflicting evidence": {
+     "precision": 1.0,
+     "recall": 0.8,
+     "f1": 0.888888888888889,
+     "tp": 12,
+     "fp": 0,
+     "fn": 3
+    },
+    "Insufficient evidence": {
+     "precision": 0.625,
+     "recall": 1.0,
+     "f1": 0.7692307692307693,
+     "tp": 15,
+     "fp": 9,
+     "fn": 0
+    }
+   },
+   "confusion": {
+    "Supported": {
+     "Supported": 9,
+     "Conflicting evidence": 0,
+     "Insufficient evidence": 6
+    },
+    "Conflicting evidence": {
+     "Supported": 0,
+     "Conflicting evidence": 12,
+     "Insufficient evidence": 3
+    },
+    "Insufficient evidence": {
+     "Supported": 0,
+     "Conflicting evidence": 0,
+     "Insufficient evidence": 15
+    }
+   },
+   "per_product_acc": {
+    "Banaras Brocades and Sarees": 0.8,
+    "Kancheepuram Silk": 0.8,
+    "Pochampalli Ikat": 0.8
+   },
+   "recall5": 1.0,
+   "citation_rate": 1.0,
+   "mean_cites": 6.4,
+   "lat_mean_ms": 14.388894466456906,
+   "lat_sd_ms": 3.127614392924529,
+   "lat_max_ms": 28.19429100054549,
+   "lat_p95_ms": 16.463957996165846,
+   "tool_calls_mean": 6.266666666666667,
+   "tool_calls_max": 7,
+   "nodes_mean": 6,
+   "replanned_cases": 0,
+   "escalated": 24
+  },
+  {
+   "n": 45,
+   "accuracy": 0.8,
+   "macro_f1": 0.8027065527065527,
+   "abstention": 1.0,
+   "false_supported": 0,
+   "per_class": {
+    "Supported": {
+     "precision": 1.0,
+     "recall": 0.6,
+     "f1": 0.7499999999999999,
+     "tp": 9,
+     "fp": 0,
+     "fn": 6
+    },
+    "Conflicting evidence": {
+     "precision": 1.0,
+     "recall": 0.8,
+     "f1": 0.888888888888889,
+     "tp": 12,
+     "fp": 0,
+     "fn": 3
+    },
+    "Insufficient evidence": {
+     "precision": 0.625,
+     "recall": 1.0,
+     "f1": 0.7692307692307693,
+     "tp": 15,
+     "fp": 9,
+     "fn": 0
+    }
+   },
+   "confusion": {
+    "Supported": {
+     "Supported": 9,
+     "Conflicting evidence": 0,
+     "Insufficient evidence": 6
+    },
+    "Conflicting evidence": {
+     "Supported": 0,
+     "Conflicting evidence": 12,
+     "Insufficient evidence": 3
+    },
+    "Insufficient evidence": {
+     "Supported": 0,
+     "Conflicting evidence": 0,
+     "Insufficient evidence": 15
+    }
+   },
+   "per_product_acc": {
+    "Banaras Brocades and Sarees": 0.8,
+    "Kancheepuram Silk": 0.8,
+    "Pochampalli Ikat": 0.8
+   },
+   "recall5": 1.0,
+   "citation_rate": 1.0,
+   "mean_cites": 6.4,
+   "lat_mean_ms": 15.373137977763285,
+   "lat_sd_ms": 1.279832679839323,
+   "lat_max_ms": 18.04324999829987,
+   "lat_p95_ms": 17.305958004726563,
+   "tool_calls_mean": 6.266666666666667,
+   "tool_calls_max": 7,
+   "nodes_mean": 6,
+   "replanned_cases": 0,
+   "escalated": 24
+  }
+ ],
+ "baseline": {
+  "n": 45,
+  "accuracy": 0.3333333333333333,
+  "macro_f1": 0.16666666666666666,
+  "abstention": 0.0,
+  "false_supported": 30,
+  "per_class": {
+   "Supported": {
+    "precision": 0.3333333333333333,
+    "recall": 1.0,
+    "f1": 0.5,
+    "tp": 15,
+    "fp": 30,
+    "fn": 0
+   },
+   "Conflicting evidence": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "tp": 0,
+    "fp": 0,
+    "fn": 15
+   },
+   "Insufficient evidence": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "tp": 0,
+    "fp": 0,
+    "fn": 15
+   }
+  },
+  "confusion": {
+   "Supported": {
+    "Supported": 15,
+    "Conflicting evidence": 0,
+    "Insufficient evidence": 0
+   },
+   "Conflicting evidence": {
+    "Supported": 15,
+    "Conflicting evidence": 0,
+    "Insufficient evidence": 0
+   },
+   "Insufficient evidence": {
+    "Supported": 15,
+    "Conflicting evidence": 0,
+    "Insufficient evidence": 0
+   }
+  },
+  "per_product_acc": {
+   "Banaras Brocades and Sarees": 0.3333333333333333,
+   "Kancheepuram Silk": 0.3333333333333333,
+   "Pochampalli Ikat": 0.3333333333333333
+  }
+ },
+ "errors_A": [
+  {
+   "case": 2,
+   "product": "Kancheepuram Silk",
+   "gold": "Supported",
+   "pred": "Insufficient evidence",
+   "label": "Product: Kanjivaram Silk Saree\nRegion: Kancheepuram\nState: Tamil Nadu\nMaterial: mulberry silk\nWeaver ID: WV-KAN-002\nBatch ID: B-KAN-0020\nGI Tagged - Authentic Handloom"
+  },
+  {
+   "case": 4,
+   "product": "Kancheepuram Silk",
+   "gold": "Supported",
+   "pred": "Insufficient evidence",
+   "label": "Product: Kanjivaram Silk Saree\nRegion: Kancheepuram\nState: Tamil Nadu\nMaterial: mulberry silk\nWeaver ID: WV-KAN-004\nBatch ID: B-KAN-0040\nGI Tagged - Authentic Handloom"
+  },
+  {
+   "case": 9,
+   "product": "Kancheepuram Silk",
+   "gold": "Conflicting evidence",
+   "pred": "Insufficient evidence",
+   "label": "Product: Mysore Silk Saree\nRegion: Kancheepuram\nState: Tamil Nadu\nWeaver ID: WV-KAN-006\nBatch ID: B-KAN-0060\nGI Tagged - Authentic Handloom"
+  },
+  {
+   "case": 17,
+   "product": "Pochampalli Ikat",
+   "gold": "Supported",
+   "pred": "Insufficient evidence",
+   "label": "Product: Pochampally Ikat Saree\nRegion: Yadadri Bhuvanagiri\nState: Telangana\nMaterial: cotton\nWeaver ID: WV-POC-002\nBatch ID: B-POC-0020\nGI Tagged - Authentic Handloom"
+  },
+  {
+   "case": 19,
+   "product": "Pochampalli Ikat",
+   "gold": "Supported",
+   "pred": "Insufficient evidence",
+   "label": "Product: Pochampally Ikat Saree\nRegion: Yadadri Bhuvanagiri\nState: Telangana\nMaterial: cotton\nWeaver ID: WV-POC-004\nBatch ID: B-POC-0040\nGI Tagged - Authentic Handloom"
+  },
+  {
+   "case": 24,
+   "product": "Pochampalli Ikat",
+   "gold": "Conflicting evidence",
+   "pred": "Insufficient evidence",
+   "label": "Product: Mysore Silk Saree\nRegion: Yadadri Bhuvanagiri\nState: Telangana\nWeaver ID: WV-POC-006\nBatch ID: B-POC-0060\nGI Tagged - Authentic Handloom"
+  },
+  {
+   "case": 32,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Supported",
+   "pred": "Insufficient evidence",
+   "label": "Product: Banarasi Silk Saree\nRegion: Chandauli\nState: Uttar Pradesh\nMaterial: silk\nWeaver ID: WV-BAN-002\nBatch ID: B-BAN-0020\nGI Tagged - Authentic Handloom"
+  },
+  {
+   "case": 34,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Supported",
+   "pred": "Insufficient evidence",
+   "label": "Product: Banarasi Silk Saree\nRegion: Jaunpur\nState: Uttar Pradesh\nMaterial: silk\nWeaver ID: WV-BAN-004\nBatch ID: B-BAN-0040\nGI Tagged - Authentic Handloom"
+  },
+  {
+   "case": 39,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Conflicting evidence",
+   "pred": "Insufficient evidence",
+   "label": "Product: Mysore Silk Saree\nRegion: Varanasi\nState: Uttar Pradesh\nWeaver ID: WV-BAN-006\nBatch ID: B-BAN-0060\nGI Tagged - Authentic Handloom"
+  }
+ ],
+ "errors_baseline": [
+  {
+   "case": 6,
+   "product": "Kancheepuram Silk",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 7,
+   "product": "Kancheepuram Silk",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 8,
+   "product": "Kancheepuram Silk",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 9,
+   "product": "Kancheepuram Silk",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 10,
+   "product": "Kancheepuram Silk",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 11,
+   "product": "Kancheepuram Silk",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 12,
+   "product": "Kancheepuram Silk",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 13,
+   "product": "Kancheepuram Silk",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 14,
+   "product": "Kancheepuram Silk",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 15,
+   "product": "Kancheepuram Silk",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 21,
+   "product": "Pochampalli Ikat",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 22,
+   "product": "Pochampalli Ikat",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 23,
+   "product": "Pochampalli Ikat",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 24,
+   "product": "Pochampalli Ikat",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 25,
+   "product": "Pochampalli Ikat",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 26,
+   "product": "Pochampalli Ikat",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 27,
+   "product": "Pochampalli Ikat",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 28,
+   "product": "Pochampalli Ikat",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 29,
+   "product": "Pochampalli Ikat",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 30,
+   "product": "Pochampalli Ikat",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 36,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 37,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 38,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 39,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 40,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Conflicting evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 41,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 42,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 43,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 44,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  },
+  {
+   "case": 45,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Insufficient evidence",
+   "baseline": "Supported"
+  }
+ ],
+ "rows_B": [
+  {
+   "case": 1,
+   "product": "Kancheepuram Silk",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.8516669976525,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 2,
+   "product": "Kancheepuram Silk",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 1,
+   "tool_calls": 11,
+   "nodes": 10,
+   "ms": 22.806041000876576,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 3,
+   "product": "Kancheepuram Silk",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.315165997482836,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 4,
+   "product": "Kancheepuram Silk",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 1,
+   "tool_calls": 11,
+   "nodes": 10,
+   "ms": 21.358625002903864,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 5,
+   "product": "Kancheepuram Silk",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.830333002260886,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 6,
+   "product": "Kancheepuram Silk",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.040792000538204,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 7,
+   "product": "Kancheepuram Silk",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.950833003036678,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 8,
+   "product": "Kancheepuram Silk",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.256292004371062,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 9,
+   "product": "Kancheepuram Silk",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 1,
+   "tool_calls": 11,
+   "nodes": 10,
+   "ms": 21.751082997070625,
+   "grade": 0.92,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": false
+  },
+  {
+   "case": 10,
+   "product": "Kancheepuram Silk",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.304250001965556,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 11,
+   "product": "Kancheepuram Silk",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 14.096083999902476,
+   "grade": 0.77,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": true
+  },
+  {
+   "case": 12,
+   "product": "Kancheepuram Silk",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 14.764874998945743,
+   "grade": 0.84,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": true
+  },
+  {
+   "case": 13,
+   "product": "Kancheepuram Silk",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 5,
+   "nodes": 6,
+   "ms": 14.440499995544087,
+   "grade": 0.69,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 5,
+   "escalated": true
+  },
+  {
+   "case": 14,
+   "product": "Kancheepuram Silk",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 7,
+   "nodes": 6,
+   "ms": 13.635374998557381,
+   "grade": 0.77,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": true
+  },
+  {
+   "case": 15,
+   "product": "Kancheepuram Silk",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 7,
+   "nodes": 6,
+   "ms": 13.147125006071292,
+   "grade": 0.84,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": true
+  },
+  {
+   "case": 16,
+   "product": "Pochampalli Ikat",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.142916999640875,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 17,
+   "product": "Pochampalli Ikat",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 1,
+   "tool_calls": 11,
+   "nodes": 10,
+   "ms": 23.60262499860255,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 18,
+   "product": "Pochampalli Ikat",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 14.44870900013484,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 19,
+   "product": "Pochampalli Ikat",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 1,
+   "tool_calls": 11,
+   "nodes": 10,
+   "ms": 24.322582998138387,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 20,
+   "product": "Pochampalli Ikat",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.73174999753246,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 21,
+   "product": "Pochampalli Ikat",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.978209004562814,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 22,
+   "product": "Pochampalli Ikat",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.661040997249074,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 23,
+   "product": "Pochampalli Ikat",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 14.90104199911002,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 24,
+   "product": "Pochampalli Ikat",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 1,
+   "tool_calls": 11,
+   "nodes": 10,
+   "ms": 24.613542002043687,
+   "grade": 0.92,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": false
+  },
+  {
+   "case": 25,
+   "product": "Pochampalli Ikat",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 14.02929199684877,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 26,
+   "product": "Pochampalli Ikat",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.554874996771105,
+   "grade": 0.77,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": true
+  },
+  {
+   "case": 27,
+   "product": "Pochampalli Ikat",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 15.056875003210735,
+   "grade": 0.84,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": true
+  },
+  {
+   "case": 28,
+   "product": "Pochampalli Ikat",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 5,
+   "nodes": 6,
+   "ms": 16.285291996609885,
+   "grade": 0.69,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 5,
+   "escalated": true
+  },
+  {
+   "case": 29,
+   "product": "Pochampalli Ikat",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 7,
+   "nodes": 6,
+   "ms": 18.61016600014409,
+   "grade": 0.77,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": true
+  },
+  {
+   "case": 30,
+   "product": "Pochampalli Ikat",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 7,
+   "nodes": 6,
+   "ms": 13.69633300055284,
+   "grade": 0.84,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": true
+  },
+  {
+   "case": 31,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 12.633041995286476,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 32,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 1,
+   "tool_calls": 11,
+   "nodes": 10,
+   "ms": 20.69916699838359,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 33,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 12.928666001243982,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 34,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 1,
+   "tool_calls": 11,
+   "nodes": 10,
+   "ms": 21.589667005173396,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 35,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Supported",
+   "pred": "Supported",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 12.78495900623966,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 36,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 15.486666998185683,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 37,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.248333001683932,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 38,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 12.774125003488734,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 39,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 1,
+   "tool_calls": 11,
+   "nodes": 10,
+   "ms": 21.918374994129408,
+   "grade": 0.92,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": false
+  },
+  {
+   "case": 40,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Conflicting evidence",
+   "pred": "Conflicting evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 15.480417001526803,
+   "grade": 1.0,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 7,
+   "escalated": false
+  },
+  {
+   "case": 41,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.980791001813486,
+   "grade": 0.77,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": true
+  },
+  {
+   "case": 42,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 6,
+   "nodes": 6,
+   "ms": 13.096750000840984,
+   "grade": 0.84,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": true
+  },
+  {
+   "case": 43,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 5,
+   "nodes": 6,
+   "ms": 15.56341700052144,
+   "grade": 0.69,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 5,
+   "escalated": true
+  },
+  {
+   "case": 44,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 7,
+   "nodes": 6,
+   "ms": 14.172374998452142,
+   "grade": 0.77,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": true
+  },
+  {
+   "case": 45,
+   "product": "Banaras Brocades and Sarees",
+   "gold": "Insufficient evidence",
+   "pred": "Insufficient evidence",
+   "baseline": "Supported",
+   "loops": 0,
+   "tool_calls": 7,
+   "nodes": 6,
+   "ms": 14.439124999626074,
+   "grade": 0.84,
+   "recall5": true,
+   "cited": true,
+   "n_cites": 6,
+   "escalated": true
+  }
+ ],
+ "variant_A_agg": {
+  "acc_mean": 0.8,
+  "acc_sd": 0.0,
+  "lat_mean_ms": 13.68027348146791,
+  "lat_sd_ms": 1.7449991805159277,
+  "tool_calls_mean": 6.266666666666667
+ },
+ "variant_B_agg": {
+  "acc_mean": 1.0,
+  "acc_sd": 0.0,
+  "lat_mean_ms": 16.730459310983186,
+  "lat_sd_ms": 2.894316091257382,
+  "tool_calls_mean": 7.066666666666666
+ }
+}

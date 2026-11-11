@@ -1,0 +1,60 @@
+%---------------------------------------------------------------------
+\chapter{Conclusion and Future Work}
+%---------------------------------------------------------------------
+
+\section{Conclusion}
+
+This report addressed the problem of checking whether a GI-tag claim on an Indian handloom product is
+supported by official evidence, a task for which the necessary information is spread across the GI
+registry, GI descriptions, the national handloom census and producer records. It presented LoomTrace,
+an agent implemented as a six-node LangGraph state graph with seven typed tools, retrieval over official
+GI text, a bounded re-planning loop, an evidence grader, a citation and confidence guardrail, and a
+human review workflow, covering fifteen registered handloom GIs.
+
+The objectives stated in Section~1.4 were addressed as follows.
+
+\begin{enumerate}[itemsep=2pt]
+\item \textbf{Agent design.} Met. The state-graph agent returns one of three verdicts with the result
+and source of every check (Chapter~4).
+\item \textbf{Tools, retrieval and bounded re-planning.} Met. Seven typed tools and a BM25 index over
+21 passages were implemented; the loop is limited to three iterations and in practice used at most two
+(Chapter~6).
+\item \textbf{Guardrail and human review.} Met. All 15 unclear cases in the test set were escalated, and
+reviewer decisions with notes are recorded and shown to the requester (Chapters~5 and~7).
+\item \textbf{Tracing and checkpoints.} Met. Every node writes a trace entry and a checkpoint; LangSmith,
+proposed in the design document, was replaced by this local store (Chapter~5).
+\item \textbf{Evaluation against a baseline.} Met for accuracy and abstention. On the 45-case golden set
+the agent reached 100\% accuracy and 100\% correct abstention against targets of 80\% and 90\%, while a
+single-lookup baseline reached 33.3\% and 0\%. Citation faithfulness was not measured, and the result
+holds for team-constructed cases only; on six realistic spelling variants the agent produced four wrong
+\emph{Conflicting} verdicts (Chapter~7).
+\item \textbf{A/B experiment.} Met. Disabling re-planning reduced accuracy from 100\% to 80\% and
+increased escalations from 15 to 24, while the loop cost 0.8 tool calls and about 3\,ms per case;
+re-planning was adopted as the default (Chapter~8).
+\end{enumerate}
+
+The main conclusion is that, for this verification task, the agentic elements contribute through
+control rather than through generation: re-planning recovers cases that a single pass would wrongly
+leave undecided, and the guardrail ensures that undecidable cases reach a person instead of receiving
+a guessed verdict.
+
+\section{Future Work}
+
+The following extensions follow directly from the limitations in Chapter~9.
+
+\begin{enumerate}[itemsep=2pt]
+\item \textbf{Robust name matching.} Add fuzzy matching of product, district and state names with a
+similarity band in which checks are marked \emph{unknown} rather than \emph{fail}, together with tables
+of state abbreviations and former state names, so that the four failures in Table~\ref{tab:probes}
+become correct or escalated verdicts.
+\item \textbf{Official GI application text.} Download and OCR the statements of case of the covered GIs
+from the IP India registry, index them with chunking and dense retrieval, and record the GI application
+numbers of all fifteen products, replacing the team-written summaries and indicative page numbers.
+\item \textbf{Real producer data.} Replace the simulated weaver and batch records with records from a
+partner weavers' cooperative, with consent and access control, and evaluate on real labels.
+\item \textbf{Independent evaluation.} Build a test set from real marketplace listings labelled by two
+independent annotators, measure inter-annotator agreement and citation faithfulness, and evaluate the
+language-model extraction path on it.
+\item \textbf{Automatic resumption.} Use the stored checkpoints to resume interrupted runs and to pause
+the graph at the review step, so that a reviewer's decision continues the same run.
+\end{enumerate}

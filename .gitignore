@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+loomtrace.db
+.DS_Store
+.env
+report/*.aux
+report/*.log
+report/*.toc
+report/*.lof
+report/*.lot
+report/*.out

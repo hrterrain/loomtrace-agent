@@ -1,0 +1,137 @@
+%---------------------------------------------------------------------
+\chapter{Requirements and System Analysis}
+%---------------------------------------------------------------------
+
+This chapter translates the problem stated in Chapter~1 into concrete requirements. Each functional
+requirement is numbered so that it can be traced to the design in Chapter~4 and tested in Chapter~7,
+and each non-functional requirement is given a numerical bound.
+
+\section{Stakeholders and Users}
+
+Four groups interact with or are affected by LoomTrace.
+
+\begin{itemize}[itemsep=2pt]
+\item \textbf{Requesters (primary users).} Buyers of handloom products, marketplace moderators who
+review seller listings, and retail staff who receive stock described as GI-tagged. They need a quick,
+understandable answer with the reasons and sources behind it, and a reference number with which to
+follow up.
+\item \textbf{Reviewers.} Staff of a weavers' cooperative society, a handloom development office or a
+marketplace trust-and-safety team who resolve cases that the agent cannot decide. They need the
+extracted claim, the reason for escalation and a way to record a decision with a note.
+\item \textbf{Weavers and GI proprietors (affected parties).} Producers within the registered area
+benefit when false claims are detected, but are harmed if a genuine product is wrongly marked as
+conflicting. Their interest is the main reason that the system abstains rather than guesses.
+\item \textbf{Course evaluators and developers.} They need step-level traces, reproducible evaluation
+scripts and clear documentation of what is real and what is simulated.
+\end{itemize}
+
+\section{Functional Requirements}
+
+\begin{description}[leftmargin=1.6cm,style=nextline,itemsep=2pt]
+\item[FR1] The system shall accept a product claim as free label text containing any subset of the
+fields product, region, state, material, weaver identifier and batch identifier, and optionally a
+label image.
+\item[FR2] The system shall extract these fields into a typed structure and resolve local product
+names and aliases to the registered GI name.
+\item[FR3] The system shall decide which checks are applicable to the claim and run them using tools
+over the GI registry, GI document text, census data, weaver records and batch records.
+\item[FR4] The system shall output exactly one of three verdicts, \emph{Supported}, \emph{Conflicting
+evidence} or \emph{Insufficient evidence}, together with the result of every check and the source
+identifiers that support it.
+\item[FR5] The system shall re-plan and retrieve again when the product cannot be resolved or the
+retrieved GI text is weak, for at most three iterations in total.
+\item[FR6] The system shall send every \emph{Insufficient evidence} verdict, and any verdict without a
+citation or below a confidence threshold, to a human review queue, and shall allow a requester to ask
+for review of any verdict.
+\item[FR7] The system shall allow a reviewer to record a final decision with a note, and shall allow
+the requester to see that decision using the case reference.
+\item[FR8] The system shall store the full case state after every node, and keep a history of all
+cases and decisions.
+\item[FR9] The system shall report claims for products outside the covered GIs as ``not covered''
+rather than as conflicting.
+\end{description}
+
+\section{Non-Functional Requirements}
+
+\begin{description}[leftmargin=1.6cm,style=nextline,itemsep=2pt]
+\item[NFR1] \textbf{Latency.} A verdict shall be returned in under 15 seconds per case, the target set
+in the project's design document.
+\item[NFR2] \textbf{Bounded cost.} The agent shall execute at most three planning iterations per case,
+and therefore at most fifteen tool calls; in rule mode it shall make no paid API calls.
+\item[NFR3] \textbf{Traceability.} Every node execution shall be recorded with its inputs and outputs,
+and every verdict shall list its source identifiers.
+\item[NFR4] \textbf{Safety.} No \emph{Supported} or \emph{Conflicting} verdict shall be issued without at
+least one citation and a grade of at least 0.6; otherwise the agent shall abstain.
+\item[NFR5] \textbf{Quality.} Verdict accuracy on the labelled test set shall be at least 80\%, and at
+least 90\% of cases labelled \emph{Insufficient evidence} shall be routed to human review.
+\item[NFR6] \textbf{Reproducibility.} All reported numbers shall be reproducible by running the
+scripts in the repository on a laptop without internet access.
+\end{description}
+
+\section{Data Sources}
+
+Table~\ref{tab:data} lists the data sources used. Two of them are official Government of India
+publications, one is the IP India registration information recorded in the project's design document,
+and the producer-level records are simulated because individual weaver and batch data are not
+published.
+
+\begin{table}[H]
+\centering
+\caption{Data sources used in LoomTrace}
+\label{tab:data}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}p{3.1cm}@{}}
+\toprule
+\textbf{Source} & \textbf{Description and use} & \textbf{Size} & \textbf{Origin} \\ \midrule
+GI registry entries (3 products) & GI application number, state, districts and materials for Kancheepuram Silk (GI~15), Pochampalli Ikat (GI~4) and Banaras Brocades and Sarees (GI~99); registry checks & 3 records & IP India registration list~\cite{ipindia}, as recorded in the design document \\
+GI catalogue (12 products) & Place of production, materials and description of 12 further handloom GIs; registry checks and retrieval corpus & 12 records, 12 passages & PIB / TRIFED, Nov.~2021~\cite{pibgi} \\
+GI description passages (3 products) & Short summaries of the registered area, method and materials; retrieval corpus & 9 passages & Written by the team from the GI descriptions; page numbers indicative \\
+Handloom census & Handloom weavers and allied workers per state/UT; plausibility check & 31 rows & PIB annexure, release ID 2202869~\cite{pibcensus} \\
+Weaver registry & Weaver identifier, name, cluster, district, looms & 180 records & \textbf{Simulated} (seeded generator) \\
+Production batches & Batch identifier, weaver, loom, yarn, start and finish dates & 360 records & \textbf{Simulated} (seeded generator) \\
+Golden test set & Labelled claims, 3 products $\times$ 3 verdicts $\times$ 5 & 45 cases & Constructed by the team \\
+Demonstration tests & Hand-written claims covering 9 products & 15 cases & Constructed by the team \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The government data were obtained by downloading the two PIB PDF documents and extracting their text.
+The census table was transcribed in full, including all 31 states and union territories. From the GI
+catalogue, only handloom textile entries whose place of production is stated in the document were
+used; two handloom entries, Khandua Saree and Karvath Kati Sarees, were excluded because the catalogue
+does not name their area of production. The catalogue does not print GI application numbers, so for
+these twelve products the system reports ``Registered GI'' without a number rather than supplying a
+number from an unverified source.
+
+The weaver and batch records are generated by a seeded pseudo-random generator (seed 42), so the same
+records are produced on every run. For each product, 12 weavers are assigned in rotation to the
+districts of that product's GI area, and each weaver is given two batches whose yarn is drawn from the
+product's registered materials. These records are labelled as simulated in the source code, in the
+tool outputs (``SIMULATED record'') and in the user interface.
+
+\section{Hardware and Software Requirements}
+
+Development and all evaluation runs used an Apple MacBook with an M2 processor and 8~GB of memory,
+running macOS 15.6. The software is written in Python~3.13 and uses LangGraph for orchestration,
+Pydantic for typed tool schemas, SQLite for persistence, Streamlit for the interface and pandas for
+tabular display. The optional language-model path uses the Groq API with the Llama~3.1~8B Instant
+model, and the optional OCR path uses EasyOCR. Exact versions are given in Table~\ref{tab:stack} and
+Appendix~\ref{app:run}. No graphics processor is required.
+
+\section{Feasibility}
+
+\paragraph{Technical feasibility.} All checks reduce to lookups and comparisons over small tables and a
+corpus of 21 passages, so they can be executed in milliseconds on a laptop. The only components that
+require external services, the language model and OCR, are optional and are isolated behind tool
+interfaces with deterministic fall-backs.
+
+\paragraph{Cost.} All results in this report were produced in rule mode, without an API key, and
+therefore made zero language-model calls and incurred no cost. In the optional model mode, the design
+limits model usage to two short calls per case (field extraction and verdict explanation); the model
+selected is available on the free tier of the Groq service~\cite{groq}.
+
+\paragraph{Time and scope control.} The scope was limited to verification against stored reference data;
+live access to government portals was avoided because the IP India application-detail pages returned
+errors during data collection and because the evaluation must be reproducible offline. The project
+was initially scoped to three products, as specified in the design document, and was extended to
+fifteen products once the official GI catalogue had been obtained.
